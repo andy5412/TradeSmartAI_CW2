@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginVertical="8dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="4dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="12dp">
+
+        <!-- 左邊：物品照片 -->
+        <ImageView
+            android:id="@+id/ivItemPhoto"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:scaleType="centerCrop"
+            android:background="#E0E0E0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <!-- 右邊頂部：物品名稱 -->
+        <TextView
+            android:id="@+id/tvItemName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="物品名稱"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#333333"
+            app:layout_constraintStart_toEndOf="@id/ivItemPhoto"
+            app:layout_constraintTop_toTopOf="@id/ivItemPhoto"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- 右邊中間：AI 估價 -->
+        <TextView
+            android:id="@+id/tvEstimatedPrice"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="4dp"
+            android:text="估價: $0"
+            android:textSize="16sp"
+            android:textColor="#2E7D32"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/ivItemPhoto"
+            app:layout_constraintTop_toBottomOf="@id/tvItemName" />
+
+        <!-- 右邊底部：GPS 位置 -->
+        <TextView
+            android:id="@+id/tvLocation"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="4dp"
+            android:text="📍 獲取位置中..."
+            android:textSize="12sp"
+            android:textColor="#757575"
+            app:layout_constraintStart_toEndOf="@id/ivItemPhoto"
+            app:layout_constraintBottom_toBottomOf="@id/ivItemPhoto"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

@@ -7,10 +7,7 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Base64
 import android.util.Log
-import android.util.TypedValue
 import android.widget.Button
-import android.widget.LinearLayout
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.biometric.BiometricPrompt
@@ -19,6 +16,8 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.room.*
 import kotlinx.coroutines.*
 import okhttp3.*
@@ -36,8 +35,11 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var cameraExecutor: ExecutorService
     private lateinit var viewFinder: PreviewView
-    private lateinit var historyContainer: LinearLayout
     private lateinit var db: AppDatabase
+
+    // 🌟 宣告 RecyclerView 同 Adapter
+    private lateinit var recyclerViewHistory: RecyclerView
+    private lateinit var historyAdapter: HistoryAdapter
 
     private val client = OkHttpClient.Builder()
         .connectTimeout(30, TimeUnit.SECONDS)
@@ -50,7 +52,12 @@ class MainActivity : AppCompatActivity() {
 
         viewFinder = findViewById(R.id.viewFinder)
         viewFinder.implementationMode = PreviewView.ImplementationMode.COMPATIBLE
-        historyContainer = findViewById(R.id.historyContainer)
+
+        // 🌟 綁定 UI 並初始化 RecyclerView
+        recyclerViewHistory = findViewById(R.id.recyclerViewHistory)
+        recyclerViewHistory.layoutManager = LinearLayoutManager(this)
+        historyAdapter = HistoryAdapter(emptyList())
+        recyclerViewHistory.adapter = historyAdapter
 
         db = AppDatabase.getDatabase(this)
         cameraExecutor = Executors.newSingleThreadExecutor()
@@ -233,25 +240,15 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // 🌟 升級版：用 RecyclerView Adapter 更新畫面
     private fun loadRoomHistoryData() {
         CoroutineScope(Dispatchers.IO).launch {
             val itemList = db.itemDao().getAllItems()
             withContext(Dispatchers.Main) {
-                historyContainer.removeAllViews()
+                // 將資料一次過傳畀 Adapter，自動刷新 UI
+                historyAdapter.updateData(itemList)
                 if (itemList.isEmpty()) {
-                    val tvEmpty = TextView(this@MainActivity).apply { text = "暫無估價紀錄" }
-                    historyContainer.addView(tvEmpty)
-                } else {
-                    for (item in itemList) {
-                        val tvItem = TextView(this@MainActivity).apply {
-                            setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f)
-                            setTextColor(ContextCompat.getColor(this@MainActivity, android.R.color.black))
-                            setPadding(10, 15, 10, 15)
-                            // 🌟 顯示埋個 GPS 位置出嚟！
-                            text = "【${item.itemName}】 估價: HKD ${item.aiEstimatedPrice}\n📍 位置: ${item.location}\n描述: ${item.aiDescription}\n"
-                        }
-                        historyContainer.addView(tvItem)
-                    }
+                    Toast.makeText(this@MainActivity, "暫無估價紀錄", Toast.LENGTH_SHORT).show()
                 }
             }
         }

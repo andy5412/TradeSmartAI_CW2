@@ -80,24 +80,19 @@
         app:layout_constraintTop_toBottomOf="@id/btnCapture"
         tools:ignore="HardcodedText" />
 
-    <ScrollView
+    <!-- 🌟 升級為專業級 RecyclerView -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewHistory"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
         android:paddingHorizontal="16dp"
+        android:clipToPadding="false"
+        android:paddingBottom="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvHistoryTitle"
-        tools:ignore="SpeakableTextPresent">
-
-        <LinearLayout
-            android:id="@+id/historyContainer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingBottom="16dp"
-            tools:ignore="UselessLeaf" />
-    </ScrollView>
+        tools:listitem="@layout/item_history" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
